@@ -56,6 +56,39 @@ const Mid1SupaBlog_xx = () => {
   })
 
   // Load All
+  const loadAll = async () => {
+    try {
+      // 插入幾筆測試資料
+      const { error } = await supabase.from('mid2_blog_90').insert([
+        {
+          id: 12,
+          title: 'Hello World',
+          descrip: 'This is a test blog post',
+          category: 'lifestyle',
+          img: '/images/photo-2.jpg',
+          remote_url: ''
+        },
+        {
+          id: 13,
+          title: 'React Query Fun',
+          descrip: 'Using React Query to manage state',
+          category: 'tech',
+          img: '/images/photo-1.jpg',
+          remote_url: ''
+        }
+      ]);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      // 重新載入資料
+      queryClient.invalidateQueries({ queryKey: ['blogs_xx'] });
+      toast.success('Test data added and reloaded!');
+    } catch (error) {
+      toast.error('Error: ' + error.message);
+    }
+  };
 
   // Update
   const { mutate: updateBlog } = useMutation({
